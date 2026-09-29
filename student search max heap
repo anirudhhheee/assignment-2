@@ -1,0 +1,118 @@
+#include <stdio.h>
+
+#define MAX 100
+
+int heap[MAX];
+int size = 0;
+int heapComparisons = 0;
+int heapSwaps = 0;
+
+void displayHeap()
+{
+    int i;
+
+    for (i = 0; i < size; i++)
+        printf("%d ", heap[i]);
+
+    printf("\n");
+}
+
+void insertMaxHeap(int value)
+{
+    int i, parent, temp;
+
+    heap[size] = value;
+    i = size;
+    size++;
+
+    while (i > 0)
+    {
+        parent = (i - 1) / 2;
+
+        heapComparisons++;
+
+        if (heap[parent] >= heap[i])
+            break;
+
+        temp = heap[parent];
+        heap[parent] = heap[i];
+        heap[i] = temp;
+
+        heapSwaps++;
+
+        i = parent;
+    }
+}
+
+int linearSearchMax(int arr[], int n, int *comparisons)
+{
+    int i;
+    int max = arr[0];
+
+    *comparisons = 0;
+
+    for (i = 1; i < n; i++)
+    {
+        (*comparisons)++;
+
+        if (arr[i] > max)
+            max = arr[i];
+    }
+
+    return max;
+}
+
+int main()
+{
+    int scores[] = {78, 92, 65, 88, 95, 72, 84, 90};
+    int n = 8;
+
+    int i;
+    int maxHeapScore;
+    int linearScore;
+    int linearComparisons;
+
+    printf("Student Scores:\n");
+
+    for (i = 0; i < n; i++)
+        printf("%d ", scores[i]);
+
+    printf("\n\n");
+
+    printf("MAX HEAP INSERTION TRACE\n");
+    printf("------------------------\n");
+
+    printf("Insertion\tHeap Arrangement\n");
+
+    for (i = 0; i < n; i++)
+    {
+        insertMaxHeap(scores[i]);
+
+        printf("%d\t\t", scores[i]);
+        displayHeap();
+    }
+
+    maxHeapScore = heap[0];
+
+    printf("\nHighest Score using Max Heap = %d\n", maxHeapScore);
+
+    printf("Heap Comparisons = %d\n", heapComparisons);
+    printf("Heap Swaps = %d\n", heapSwaps);
+
+    linearScore = linearSearchMax(scores, n, &linearComparisons);
+
+    printf("\nLINEAR SEARCH\n");
+    printf("-------------\n");
+
+    printf("Highest Score using Linear Search = %d\n", linearScore);
+    printf("Linear Search Comparisons = %d\n", linearComparisons);
+
+    printf("\nCOMPLEXITY ANALYSIS\n");
+    printf("-------------------\n");
+
+    printf("Max Heap Insertion : O(log n)\n");
+    printf("Max Heap Find Max  : O(1)\n");
+    printf("Linear Search      : O(n)\n");
+
+    return 0;
+}
